@@ -1,10 +1,16 @@
 spring:
   application:
     name: user-service
-  jackson:
-    deserialization:
-      fail-on-unknown-properties: false
-
-logging:
-  pattern:
-    level: "%5p [%X{correlationId}]"
+  datasource:
+    url: jdbc:postgresql://postgres:5432/userservice
+    username: userservice
+    password: userservice
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect

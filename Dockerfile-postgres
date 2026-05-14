@@ -1,0 +1,5 @@
+FROM postgres:16
+
+ENV POSTGRES_DB=userservice
+ENV POSTGRES_USER=userservice
+ENV POSTGRES_PASSWORD=userservice
