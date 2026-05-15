@@ -59,4 +59,4 @@ jobs:
     steps:
 
       - name: Deploy placeholder
-        run: echo "Deploy a EC2 pendiente"
+        run: echo "Deploy a EC2 pendiente."
