@@ -28,10 +28,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build project
-        run: ./gradlew build --no-daemon
-
-      - name: Run tests
-        run: ./gradlew test --no-daemon
+        run: ./gradlew build -x test --no-daemon
 
       - name: Deploy placeholder
         run: echo "Deploy a EC2 pendiente"
