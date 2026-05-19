@@ -53,21 +53,38 @@ jobs:
         run: ./gradlew test --no-daemon
 
   deploy:
-  runs-on: ubuntu-latest
-  needs: test
+    runs-on: ubuntu-latest
+    needs: test
 
-  steps:
+    steps:
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Connect to EC2 instance
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ec2-user
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          echo "Conexión exitosa hacia EC2"
-          cd GRUPO2_N_DEVOPS
-          docker ps
+      - name: Connect and deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Conexión exitosa hacia EC2"
+
+            cd GRUPO2_N_DEVOPS
+
+            git pull origin master
+
+            docker stop grupo2-backend-container || true
+            docker rm grupo2-backend-container || true
+
+            docker build -t grupo2-backend .
+
+            docker run -d \
+              --name grupo2-backend-container \
+              -p 8080:8080 \
+              -e DB_HOST=$DB_HOST \
+              -e DB_PORT=$DB_PORT \
+              -e DB_NAME=$DB_NAME \
+              -e DB_USER=$DB_USER \
+              -e DB_PASSWORD=$DB_PASSWORD \
+              grupo2-backend
